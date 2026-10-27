@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="hi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Aureon Cloud</title>
+<style>
+  :root { color-scheme: dark; }
+  body { margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
+         background:#0b0f19; color:#e8ecf4; font-family:system-ui,sans-serif; }
+  .card { width:min(92vw,420px); padding:24px; }
+  h1 { margin:0 0 4px; font-size:28px; }
+  p { color:#8b95a9; margin:0 0 20px; font-size:14px; }
+  input { width:100%; box-sizing:border-box; padding:14px; border-radius:10px; border:1px solid #2a3350;
+          background:#121829; color:#e8ecf4; font-size:16px; margin-bottom:12px; }
+  button { width:100%; padding:14px; border:0; border-radius:10px; background:#4f7cff; color:#fff;
+           font-size:16px; font-weight:600; }
+  .link { background:none; color:#8b95a9; margin-top:8px; font-size:14px; font-weight:400; }
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>Aureon Cloud</h1>
+  <p id="msg">Apne server ka link daalo (jaise https://cloud.example.com/?tkn=TOKEN)</p>
+  <input id="url" type="url" placeholder="https://..." autocomplete="off">
+  <button id="go">Kholo</button>
+  <button id="change" class="link" style="display:none">Link badlo</button>
+</div>
+<script>
+  var KEY = "aureon_cloud_url";
+  var saved = ""; try { saved = localStorage.getItem(KEY) || ""; } catch (e) {}
+  var input = document.getElementById("url"), msg = document.getElementById("msg");
+  var cancelled = false, timer = null;
+  function open(u) { location.href = u; }
+  document.getElementById("go").onclick = function () {
+    var u = input.value.trim();
+    if (!/^https?:\/\//.test(u)) { msg.textContent = "Link https:// se shuru hona chahiye"; return; }
+    try { localStorage.setItem(KEY, u); } catch (e) {}
+    open(u);
+  };
+  if (saved) {
+    input.value = saved;
+    msg.textContent = "Khul raha hai... (3 sec)";
+    var change = document.getElementById("change");
+    change.style.display = "block";
+    change.onclick = function () { cancelled = true; clearTimeout(timer); msg.textContent = "Naya link daalo"; change.style.display = "none"; };
+    timer = setTimeout(function () { if (!cancelled) open(saved); }, 3000);
+  }
+</script>
+</body>
+</html>

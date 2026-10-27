@@ -1,0 +1,37 @@
+services:
+  aureon-cloud:
+    build: .
+    restart: unless-stopped
+    init: true
+    # IDE ka login token. .env me AUREON_TOKEN zaroor set karo.
+    command: ["--connection-token", "${AUREON_TOKEN}"]
+    volumes:
+      - workspace:/home/workspace
+
+  # Banayi hui APK yahan se download hoti hai (workspace/apk-out folder)
+  apk:
+    image: python:3-alpine
+    restart: unless-stopped
+    working_dir: /workspace/apk-out
+    command: ["python", "-m", "http.server", "8080"]
+    volumes:
+      - workspace:/workspace:ro
+
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      IDE_DOMAIN: ${IDE_DOMAIN}
+      APK_DOMAIN: ${APK_DOMAIN}
+      APK_USER: ${APK_USER}
+      APK_HASH: ${APK_HASH}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+
+volumes:
+  workspace:
+  caddy_data:

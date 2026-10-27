@@ -1,0 +1,10 @@
+{$IDE_DOMAIN} {
+	reverse_proxy aureon-cloud:3000
+}
+
+{$APK_DOMAIN} {
+	basic_auth {
+		{$APK_USER} {$APK_HASH}
+	}
+	reverse_proxy apk:8080
+}
