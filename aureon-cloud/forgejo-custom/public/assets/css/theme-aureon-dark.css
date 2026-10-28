@@ -1,0 +1,82 @@
+/* Aureon dark: Forgejo dark theme + Aureon rang */
+@import "./theme-forgejo-dark.css";
+
+gitea-theme-meta-info {
+  --theme-display-name: "Aureon dark";
+}
+
+:root {
+  --color-primary: #7c6cff;
+  --color-primary-contrast: #0b1020;
+  --color-primary-dark-1: #8d7fff;
+  --color-primary-dark-2: #9e92ff;
+  --color-primary-dark-3: #afa5ff;
+  --color-primary-dark-4: #c0b8ff;
+  --color-primary-dark-5: #d1cbff;
+  --color-primary-dark-6: #e2deff;
+  --color-primary-dark-7: #f3f1ff;
+  --color-primary-light-1: #6b5bf0;
+  --color-primary-light-2: #5a4ad6;
+  --color-primary-light-3: #4a3cb8;
+  --color-primary-light-4: #3d3198;
+  --color-primary-light-5: #312779;
+  --color-primary-light-6: #261e5c;
+  --color-primary-light-7: #1b1544;
+  --color-primary-alpha-10: #7c6cff19;
+  --color-primary-alpha-20: #7c6cff33;
+  --color-primary-alpha-30: #7c6cff4b;
+  --color-primary-alpha-40: #7c6cff66;
+  --color-primary-alpha-50: #7c6cff80;
+  --color-primary-alpha-60: #7c6cff99;
+  --color-primary-alpha-70: #7c6cffb3;
+  --color-primary-alpha-80: #7c6cffcc;
+  --color-primary-alpha-90: #7c6cffe1;
+  --color-body: #0b1020;
+  --color-nav-bg: #0e1426;
+  --color-nav-hover-bg: #1a2240;
+  --color-header-wrapper: #0e1426;
+  --color-footer: #0b1020;
+  --color-box-body: #0f1630;
+  --color-box-header: #141c3a;
+  --color-card: #0f1630;
+}
+
+/* "Open in Aureon Cloud" button */
+.aureon-open-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: 0;
+  border-radius: 6px;
+  font: inherit;
+  font-weight: 600;
+  color: #0b1020;
+  background: linear-gradient(135deg, #7c6cff, #22d3ee);
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.aureon-open-btn:hover { filter: brightness(1.1); }
+.aureon-open-floating {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 900;
+  box-shadow: 0 4px 16px #0008;
+}
+.aureon-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 72px;
+  transform: translateX(-50%);
+  z-index: 1000;
+  max-width: 90vw;
+  padding: 10px 14px;
+  border-radius: 8px;
+  color: #e6e9f5;
+  background: #141c3a;
+  border: 1px solid #7c6cff;
+  box-shadow: 0 4px 16px #0008;
+  font-size: 14px;
+}

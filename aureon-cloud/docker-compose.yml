@@ -22,9 +22,40 @@ services:
       FORGEJO__security__INSTALL_LOCK: "true"
       FORGEJO__service__DISABLE_REGISTRATION: ${GIT_DISABLE_REGISTRATION:-true}
       FORGEJO__database__DB_TYPE: sqlite3
+      FORGEJO____APP_NAME: Aureon Git
+      FORGEJO__ui__THEMES: aureon-dark,aureon-light,forgejo-auto,forgejo-light,forgejo-dark
+      FORGEJO__ui__DEFAULT_THEME: aureon-dark
       FORGEJO__actions__ENABLED: "true"
+      # Workflows me "uses: actions/checkout@v4" jaisi actions GitHub se aayengi
+      FORGEJO__actions__DEFAULT_ACTIONS_URL: github
     volumes:
       - forgejo_data:/data
+      # Aureon branding, theme aur "Open in Aureon Cloud" button
+      - ./forgejo-custom/public:/data/gitea/public
+      - ./forgejo-custom/templates:/data/gitea/templates
+
+  # CI runner (Actions chalane ke liye). Sirf tab chalta hai jab: docker compose --profile ci up -d
+  forgejo-runner:
+    profiles: ["ci"]
+    image: code.forgejo.org/forgejo/runner:6
+    restart: unless-stopped
+    user: "0:0"
+    depends_on:
+      - forgejo
+    environment:
+      RUNNER_TOKEN: ${RUNNER_TOKEN}
+    volumes:
+      - runner_data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    working_dir: /data
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        [ -f .runner ] || forgejo-runner register --no-interactive \
+          --instance http://forgejo:3000 --token "$$RUNNER_TOKEN" \
+          --name aureon-runner \
+          --labels "ubuntu-latest:docker://catthehacker/ubuntu:act-22.04"
+        exec forgejo-runner daemon
 
   # Banayi hui APK yahan se download hoti hai (workspace/apk-out folder)
   apk:
@@ -54,4 +85,5 @@ services:
 volumes:
   workspace:
   forgejo_data:
+  runner_data:
   caddy_data:
