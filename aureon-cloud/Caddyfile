@@ -2,6 +2,13 @@
 	reverse_proxy aureon-cloud:3000
 }
 
+{$GIT_DOMAIN} {
+	request_body {
+		max_size 512MB
+	}
+	reverse_proxy forgejo:3000
+}
+
 {$APK_DOMAIN} {
 	basic_auth {
 		{$APK_USER} {$APK_HASH}

@@ -1,4 +1,5 @@
 services:
+  # Apna Codespaces: browser me IDE + JDK + Android SDK
   aureon-cloud:
     build: .
     restart: unless-stopped
@@ -7,6 +8,23 @@ services:
     command: ["--connection-token", "${AUREON_TOKEN}"]
     volumes:
       - workspace:/home/workspace
+
+  # Apna GitHub: Forgejo (repos, issues, pull requests)
+  forgejo:
+    image: codeberg.org/forgejo/forgejo:11
+    restart: unless-stopped
+    environment:
+      USER_UID: "1000"
+      USER_GID: "1000"
+      FORGEJO__server__DOMAIN: ${GIT_DOMAIN}
+      FORGEJO__server__ROOT_URL: https://${GIT_DOMAIN}/
+      FORGEJO__server__DISABLE_SSH: "true"
+      FORGEJO__security__INSTALL_LOCK: "true"
+      FORGEJO__service__DISABLE_REGISTRATION: ${GIT_DISABLE_REGISTRATION:-true}
+      FORGEJO__database__DB_TYPE: sqlite3
+      FORGEJO__actions__ENABLED: "true"
+    volumes:
+      - forgejo_data:/data
 
   # Banayi hui APK yahan se download hoti hai (workspace/apk-out folder)
   apk:
@@ -25,6 +43,7 @@ services:
       - "443:443"
     environment:
       IDE_DOMAIN: ${IDE_DOMAIN}
+      GIT_DOMAIN: ${GIT_DOMAIN}
       APK_DOMAIN: ${APK_DOMAIN}
       APK_USER: ${APK_USER}
       APK_HASH: ${APK_HASH}
@@ -34,4 +53,5 @@ services:
 
 volumes:
   workspace:
+  forgejo_data:
   caddy_data:
